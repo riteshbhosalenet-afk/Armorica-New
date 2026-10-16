@@ -1,0 +1,6 @@
+{
+  "name": "Armorica Technologies LLP - Advanced Engineering & Defense Portal",
+  "description": "Corporate engineering, defense supply chain (Pune DefTech), and industrial machinery catalog for Armorica Technologies LLP, Satara.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
