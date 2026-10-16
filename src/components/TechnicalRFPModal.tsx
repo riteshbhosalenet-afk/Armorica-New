@@ -69,26 +69,21 @@ export const TechnicalRFPModal: React.FC<TechnicalRFPModalProps> = ({
     }
 
     setErrorMsg('');
+    const refCode = `ARM-RFP-2026-${Math.floor(100000 + Math.random() * 900000)}`;
+    const newRecord = {
+      referenceId: refCode,
+      ...formData,
+      status: 'UNDER_TECHNICAL_REVIEW',
+      submittedAt: new Date().toISOString()
+    };
     try {
-      const response = await fetch('/api/rfp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-      if (response.ok) {
-        const result = await response.json();
-        setSubmittedRef(result.referenceId);
-      } else {
-        const errorData = await response.json();
-        setErrorMsg(errorData.error || 'Failed to submit RFP to the server.');
-      }
+      const existing = JSON.parse(localStorage.getItem('armorica_rfp_registry') || '[]');
+      existing.unshift(newRecord);
+      localStorage.setItem('armorica_rfp_registry', JSON.stringify(existing.slice(0, 50)));
     } catch {
-      // Fallback in case of network issue
-      const refCode = `ARM-RFP-2026-${Math.floor(100000 + Math.random() * 900000)}`;
-      setSubmittedRef(refCode);
+      // Local storage fallback
     }
+    setSubmittedRef(refCode);
   };
 
   const handlePrint = () => {

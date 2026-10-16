@@ -28,23 +28,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenRFP }) => 
 
     setErrorMsg('');
     try {
-      await fetch('/api/rfp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          companyName: formData.name + ' (General Contact Inquiry)',
-          contactName: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          sector: formData.subject,
-          machineryName: 'Direct Site Inquiry',
-          notes: formData.message,
-          specifications: formData.message,
-          timeline: 'Immediate Contact Request'
-        })
+      const existing = JSON.parse(localStorage.getItem('armorica_contact_inquiries') || '[]');
+      existing.unshift({
+        ...formData,
+        submittedAt: new Date().toISOString()
       });
+      localStorage.setItem('armorica_contact_inquiries', JSON.stringify(existing.slice(0, 50)));
     } catch {
-      // Graceful fallback
+      // Local storage fallback
     }
 
     setSubmitted(true);
